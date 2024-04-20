@@ -16,7 +16,6 @@ export default function Page() {
         <InitailizeUserButton />
         <PinSetupButton />
         <WalletDetails />
-        <Transactions />
       </div>
     </CenterContainer>
   );
