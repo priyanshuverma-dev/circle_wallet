@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 const useTransactions = ({ walletId }: { walletId: string }) => {
   const { data, error, isLoading, status, refetch } = useQuery({
     queryKey: ["transaction", walletId],
+    enabled: walletId != null,
     queryFn: async () => {
       try {
         const response = await fetch(`/api/wallet/${walletId}/transactions`);

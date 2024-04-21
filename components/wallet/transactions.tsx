@@ -13,7 +13,7 @@ export default function Transactions() {
     walletId: global.selectedWalletId!,
   });
 
-  if (isLoading) {
+  if (isLoading || global.selectedWalletId == null) {
     return (
       <div className="flex justify-center items-center p-2 flex-col w-full">
         <Skeleton className="h-10 w-full mb-2" />

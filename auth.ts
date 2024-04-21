@@ -35,6 +35,7 @@ export const {
       session.user.walletIds = token.walletIds as any;
       session.user.userCreated = token.userCreated as any;
       session.user.id = token.sub as any;
+      session.user.pinStatus = token.pinStatus as any;
       return session;
     },
     async jwt({ token }) {
@@ -51,6 +52,7 @@ export const {
       token.sub = existingUser.id;
       token.walletIds = existingUser.walletIds;
       token.userCreated = existingUser.userCreated;
+      token.pinStatus = existingUser.pinStatus;
       return token;
     },
   },

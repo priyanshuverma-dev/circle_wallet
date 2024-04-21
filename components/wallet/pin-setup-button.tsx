@@ -58,7 +58,7 @@ export default function PinSetupButton() {
             const data = await response.json();
             if (response.status !== 200) throw new Error(data.message);
             toast.success("Success");
-            await qc.fetchQuery({
+            await qc.refetchQueries({
               queryKey: ["me"],
             });
           }

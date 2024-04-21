@@ -9,26 +9,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { W3SSdk } from "@circle-fin/w3s-pw-web-sdk";
 import { MoreVertical } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function MoreMenu() {
-  const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const session = useSession();
   const circleClient = new W3SSdk();
 
   useEffect(() => {
-    setIsMounted(true);
     circleClient.setAppSettings({
       appId: process.env.NEXT_PUBLIC_CIRCLE_APP_ID as string,
     });
-  }, []);
-
-  if (!isMounted) {
-    return null;
-  }
+  }, [circleClient]);
 
   async function restorePin() {
     try {
@@ -57,6 +51,7 @@ export default function MoreMenu() {
       setLoading(false);
     }
   }
+
   async function updatePin() {
     try {
       setLoading(true);
@@ -91,13 +86,17 @@ export default function MoreMenu() {
         <MoreVertical />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem disabled={loading} onClick={updatePin}>
-          Update Pin
-        </DropdownMenuItem>
-        <DropdownMenuItem disabled={loading} onClick={restorePin}>
-          Forget Pin
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        {session.data?.user.pinStatus == "ENABLED" && (
+          <>
+            <DropdownMenuItem disabled={loading} onClick={updatePin}>
+              Update Pin
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled={loading} onClick={restorePin}>
+              Forget Pin
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
         <DropdownMenuItem
           disabled={loading}
           onClick={() =>
