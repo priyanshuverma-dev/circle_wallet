@@ -51,7 +51,7 @@ export default function WalletDetails() {
         <WalletSelector />
       </div>
       <div className="flex items-center justify-between">
-        <p className="leading-6 text-muted-foreground my-1">
+        <p className="leading-6 text-muted-foreground my-1 overflow-clip">
           Wallet Address: {data?.wallet.address}
         </p>
         <button onClick={() => copyAddress(data?.wallet.address!)}>
