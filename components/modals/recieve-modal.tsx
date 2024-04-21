@@ -28,7 +28,9 @@ const RecieveModal = () => {
         <DialogHeader>
           <DialogTitle>Recieve Tokens</DialogTitle>
           <DialogDescription>
+            <p>
             Copy the required information and refill Tokens in your wallet.
+            </p>
           </DialogDescription>
           <div className="flex flex-col space-y-3 p-2">
             <div className="flex items-center justify-between">
@@ -40,7 +42,7 @@ const RecieveModal = () => {
               </button>
             </div>
             <div className="flex items-center justify-between">
-              <p className="leading-6 text-muted-foreground my-1">
+              <p className="leading-6 text-muted-foreground my-1 overflow-clip">
                 Wallet Address: {modal.walletAddress}
               </p>
               <button onClick={() => copyText(modal.walletAddress)}>
