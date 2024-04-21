@@ -1,5 +1,4 @@
 import CenterContainer from "@/components/center-container";
-import InitailizeUserButton from "@/components/wallet/initialise-user-button";
 import Header from "@/components/wallet/header";
 import PinSetupButton from "@/components/wallet/pin-setup-button";
 import UserProfile from "@/components/wallet/user-profile";
