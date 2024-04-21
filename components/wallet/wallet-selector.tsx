@@ -14,12 +14,13 @@ import { globalState } from "@/store/global";
 import { useEffect, useState } from "react";
 import { W3SSdk } from "@circle-fin/w3s-pw-web-sdk";
 import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function WalletSelector() {
   const global = globalState();
   const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const qc = useQueryClient();
   const circleClient = new W3SSdk();
 
   useEffect(() => {
@@ -55,7 +56,9 @@ export default function WalletSelector() {
           });
           const data = await response.json();
           if (response.status !== 200) throw new Error(data.message);
-
+          qc.refetchQueries({
+            queryKey: ["user"],
+          });
           toast.success("Success");
         }
         if (error) {

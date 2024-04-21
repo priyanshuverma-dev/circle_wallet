@@ -203,7 +203,7 @@ const SendModal = () => {
                           placeholder="Enter reciever address"
                           {...field}
                         />
-                        {form.getValues("destinationAddress").length > 1 && (
+                        {form.getValues("destinationAddress")?.length > 1 && (
                           <button
                             type="button"
                             className="absolute inset-y-0 right-0 flex items-center px-2"

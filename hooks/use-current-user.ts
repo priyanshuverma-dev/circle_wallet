@@ -8,7 +8,7 @@ const useCurrentUser = () => {
   const global = globalState();
   const shouldFetch = !global.user;
   const { data, error, isLoading, status, refetch } = useQuery({
-    queryKey: ["me"],
+    queryKey: ["user"],
     enabled: shouldFetch,
     queryFn: async () => {
       try {
