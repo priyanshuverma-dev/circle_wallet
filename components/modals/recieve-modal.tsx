@@ -25,32 +25,30 @@ const RecieveModal = () => {
       }}
     >
       <DialogContent>
-        <DialogHeader>
+        <DialogHeader className="!text-left">
           <DialogTitle>Recieve Tokens</DialogTitle>
-          <DialogDescription>
-            <p>
+          <DialogDescription className="">
             Copy the required information and refill Tokens in your wallet.
-            </p>
           </DialogDescription>
-          <div className="flex flex-col space-y-3 p-2">
-            <div className="flex items-center justify-between">
-              <p className="leading-6 text-muted-foreground my-1">
-                Wallet Id: {modal.walletId}
-              </p>
-              <button onClick={() => copyText(modal.walletId)}>
-                <Clipboard className="m-4 h-4" />
-              </button>
-            </div>
-            <div className="flex items-center justify-between">
-              <p className="leading-6 text-muted-foreground my-1 overflow-clip">
-                Wallet Address: {modal.walletAddress}
-              </p>
-              <button onClick={() => copyText(modal.walletAddress)}>
-                <Clipboard className="m-4 h-4" />
-              </button>
-            </div>
-          </div>
         </DialogHeader>
+        <div className="flex flex-col space-y-3 p-2 truncate">
+          <div className="flex items-center justify-between">
+            <p className="leading-6 text-muted-foreground w-[80%] my-1 truncate">
+              Wallet Id: {modal.walletId}
+            </p>
+            <button onClick={() => copyText(modal.walletId)}>
+              <Clipboard className="m-4 h-4" />
+            </button>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="leading-6 text-muted-foreground my-1 w-[80%] truncate">
+              Wallet Address: {modal.walletAddress}
+            </p>
+            <button onClick={() => copyText(modal.walletAddress)}>
+              <Clipboard className="m-4 h-4" />
+            </button>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );

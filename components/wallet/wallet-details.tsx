@@ -50,8 +50,8 @@ export default function WalletDetails() {
       <div className="w-full">
         <WalletSelector />
       </div>
-      <div className="flex items-center justify-between">
-        <p className="leading-6 text-muted-foreground my-1 overflow-clip">
+      <div className="flex items-center justify-between truncate w-[80%]">
+        <p className="leading-6 text-muted-foreground my-1 w-[80%] truncate">
           Wallet Address: {data?.wallet.address}
         </p>
         <button onClick={() => copyAddress(data?.wallet.address!)}>

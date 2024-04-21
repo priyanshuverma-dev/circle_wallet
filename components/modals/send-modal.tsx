@@ -164,147 +164,139 @@ const SendModal = () => {
       }}
     >
       <DialogContent>
-        <DialogHeader>
+        <DialogHeader className="!text-left">
           <DialogTitle>Send Tokens</DialogTitle>
           <DialogDescription>
             Send Tokens to anyone by filling correct details.
           </DialogDescription>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="fromAddress"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>From Address</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="auto fetching.."
-                        disabled
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                disabled={loading}
-                control={form.control}
-                name="destinationAddress"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Destination Address</FormLabel>
-
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          placeholder="Enter reciever address"
-                          {...field}
-                        />
-                        {form.getValues("destinationAddress")?.length > 1 && (
-                          <button
-                            type="button"
-                            className="absolute inset-y-0 right-0 flex items-center px-2"
-                            onClick={() => setShowNameField(true)}
-                          >
-                            <PlusCircleIcon />
-                          </button>
-                        )}
-                      </div>
-                    </FormControl>
-                    <Select
-                      onValueChange={(v) =>
-                        form.setValue("destinationAddress", v)
-                      }
-                    >
-                      <SelectTrigger className="">
-                        Recent addresses
-                      </SelectTrigger>
-                      <SelectContent>
-                        {contacts.map((contact) => (
-                          <SelectItem value={contact.address}>
-                            {contact.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {showNameField && (
-                <FormField
-                  disabled={loading}
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Reciever's Name (optional)</FormLabel>
-
-                      <FormControl>
-                        <Input placeholder="Name of Reciever" {...field} />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-              <FormField
-                disabled={loading}
-                control={form.control}
-                name="tokenId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Token</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a token" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {data?.tokens.map((token) => (
-                          <SelectItem value={token.token.id}>
-                            {token.token.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                disabled={loading}
-                control={form.control}
-                name="amount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Amount</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter amount"
-                        {...field}
-                        type="number"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button disabled={loading} type="submit">
-                Send
-              </Button>
-            </form>
-          </Form>
         </DialogHeader>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="fromAddress"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>From Address</FormLabel>
+                  <FormControl>
+                    <Input placeholder="auto fetching.." disabled {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              disabled={loading}
+              control={form.control}
+              name="destinationAddress"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Destination Address</FormLabel>
+
+                  <FormControl>
+                    <div className="relative">
+                      <Input placeholder="Enter reciever address" {...field} />
+                      {form.getValues("destinationAddress")?.length > 1 && (
+                        <button
+                          type="button"
+                          className="absolute inset-y-0 right-0 flex items-center px-2"
+                          onClick={() => setShowNameField(true)}
+                        >
+                          <PlusCircleIcon />
+                        </button>
+                      )}
+                    </div>
+                  </FormControl>
+                  <Select
+                    onValueChange={(v) =>
+                      form.setValue("destinationAddress", v)
+                    }
+                  >
+                    <SelectTrigger className="">Recent addresses</SelectTrigger>
+                    <SelectContent>
+                      {contacts.map((contact) => (
+                        <SelectItem value={contact.address}>
+                          {contact.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {showNameField && (
+              <FormField
+                disabled={loading}
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Reciever's Name (optional)</FormLabel>
+
+                    <FormControl>
+                      <Input placeholder="Name of Reciever" {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            <FormField
+              disabled={loading}
+              control={form.control}
+              name="tokenId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Token</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a token" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {data?.tokens.map((token) => (
+                        <SelectItem value={token.token.id}>
+                          {token.token.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              disabled={loading}
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Amount</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter amount"
+                      {...field}
+                      type="number"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button disabled={loading} type="submit">
+              Send
+            </Button>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
