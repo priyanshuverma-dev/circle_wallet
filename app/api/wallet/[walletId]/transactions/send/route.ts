@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import circleServer from "@/lib/circle-server";
+import db from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function POST(
@@ -8,13 +9,41 @@ export async function POST(
 ) {
   try {
     const walletId = params.walletId;
-    const { fromAddress, tokenId, amount, destinationAddress } =
+    const { fromAddress, tokenId, amount, destinationAddress, name } =
       await request.json();
 
     const session = await auth();
     if (!session) throw new Error("Unauthenticated");
 
     const userId = session.user.id;
+
+    const user = await db.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (user) {
+      const existingContactIndex = user.contacts.findIndex(
+        (contact) => contact.address === destinationAddress
+      );
+
+      if (existingContactIndex === -1) {
+        // Contact doesn't exist, add it to the contacts array
+        const updatedContacts = [
+          ...user.contacts,
+          { address: destinationAddress, name },
+        ];
+
+        // Update the user record in the database with the updated contacts array
+        await db.user.update({
+          where: { id: userId },
+          data: {
+            contacts: updatedContacts,
+          },
+        });
+      }
+    }
 
     const tokenRes = await circleServer.createUserToken({
       userId,

@@ -19,13 +19,13 @@ export default function Header() {
 
         <Link
           className="text-sm font-medium hover:underline underline-offset-4"
-          href="#"
+          href="https://github.com/priyanshuverma-dev"
         >
-          About
+          About Developer
         </Link>
         <Link
           className="text-sm font-medium hover:underline underline-offset-4"
-          href="#"
+          href="https://github.com/priyanshuverma-dev/circle_wallet"
         >
           Github
         </Link>

@@ -31,7 +31,7 @@ export default function WalletDetails() {
     walletId: global.selectedWalletId!,
   });
 
-  if (walletLoading)
+  if (global.selectedWalletId == null || walletLoading)
     return (
       <div className="flex justify-center items-center p-2 flex-col w-full">
         <Skeleton className="h-10 w-full mb-2" />

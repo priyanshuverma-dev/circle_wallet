@@ -7,11 +7,13 @@ import { useEffect, useState } from "react";
 import { PinStatus } from "@prisma/client";
 import useCurrentUser from "@/hooks/use-current-user";
 import { W3SSdk } from "@circle-fin/w3s-pw-web-sdk";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function PinSetupButton() {
   const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(false);
   const { data, isLoading, error } = useCurrentUser();
+  const qc = useQueryClient();
 
   const circleClient = new W3SSdk();
 
@@ -28,7 +30,6 @@ export default function PinSetupButton() {
 
   if (isLoading) return null;
   if (error) return null;
-  if (data?.userCreated === false) return null;
   if (data?.pinStatus === PinStatus.ENABLED) return null;
 
   async function setPin() {
@@ -39,29 +40,30 @@ export default function PinSetupButton() {
       const data = await response.json();
 
       if (response.status !== 200) throw new Error(data.message);
-
-      console.log(data);
-
       circleClient.setAuthentication({
         userToken: data.userToken,
         encryptionKey: data.encryptionKey,
       });
 
       circleClient.execute(data.challengeId, async (error, result) => {
-        if (result) {
-          const response = await fetch("/api/users/set-pin", {
-            method: "POST",
-            body: JSON.stringify({
-              pinStatus: PinStatus.ENABLED,
-              securityQuestionStatus: PinStatus.ENABLED,
-            }),
-          });
-          const data = await response.json();
-          if (response.status !== 200) throw new Error(data.message);
-
-          toast.success("Success");
-        }
-        if (error) {
+        try {
+          if (result) {
+            const response = await fetch("/api/users/set-pin", {
+              method: "POST",
+              body: JSON.stringify({
+                pinStatus: PinStatus.ENABLED,
+                securityQuestionStatus: PinStatus.ENABLED,
+              }),
+            });
+            const data = await response.json();
+            if (response.status !== 200) throw new Error(data.message);
+            toast.success("Success");
+            await qc.fetchQuery({
+              queryKey: ["me"],
+            });
+          }
+          if (error) throw new Error(data.message);
+        } catch (error: any) {
           console.error(error);
           toast.error(`Error: ${error.message}`);
         }

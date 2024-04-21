@@ -2,12 +2,34 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "./auth.config";
 import db from "./lib/db";
+import circleServer from "./lib/circle-server";
 
 export const {
   handlers: { GET, POST },
   auth,
 } = NextAuth({
   adapter: PrismaAdapter(db),
+  events: {
+    createUser: async ({ user }) => {
+      const response = await circleServer.createUser({
+        userId: user.id!,
+      });
+
+      if (response.status != 201) throw new Error("Failed to create user");
+
+      const userDetails = await circleServer.getUser({ userId: user.id! });
+
+      await db.user.update({
+        where: { id: user.id! },
+        data: {
+          securityQuestionStatus:
+            userDetails.data?.user?.securityQuestionStatus,
+          pinStatus: userDetails.data?.user?.pinStatus,
+          userCreated: true,
+        },
+      });
+    },
+  },
   callbacks: {
     session({ session, token }) {
       session.user.walletIds = token.walletIds as any;

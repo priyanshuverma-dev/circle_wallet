@@ -2,8 +2,12 @@ import { auth } from "@/auth";
 import circleServer from "@/lib/circle-server";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(
+  request: Request,
+  { params }: { params: { walletId: string } }
+) {
   try {
+    const walletId = params.walletId;
     const session = await auth();
     if (!session) throw new Error("Unauthenticated");
 
@@ -15,6 +19,8 @@ export async function GET() {
 
     const transactionsLists = await circleServer.listTransactions({
       userToken: tokenRes.data.userToken,
+      walletIds: [walletId],
+      pageSize: 10,
     });
 
     if (!transactionsLists.data?.transactions)

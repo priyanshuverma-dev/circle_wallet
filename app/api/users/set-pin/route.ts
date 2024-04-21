@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
 
       const walletIds = wallets.data?.wallets?.map((wallet) => wallet.id);
 
-      const updatedUser = await db.user.update({
+      await db.user.update({
         where: { id: session.user.id },
         data: {
           pinStatus: "ENABLED",
@@ -74,8 +74,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const {} = await req.json();
-
     const userAccess = await circleServer.createUserToken({
       userId: session.user.id,
     });
@@ -86,12 +84,14 @@ export async function POST(req: NextRequest) {
 
     // challengeId.data?.challenge?.status
     const wallets = await circleServer.listWallets({
-      userToken: userAccess.data?.userToken,
+      userToken: userAccess.data.userToken,
     });
 
     const walletIds = wallets.data?.wallets?.map((wallet) => wallet.id);
 
-    const updatedUser = await db.user.update({
+    console.log(walletIds);
+
+    await db.user.update({
       where: { id: session.user.id },
       data: {
         pinStatus: "ENABLED",

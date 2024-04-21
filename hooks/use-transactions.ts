@@ -4,12 +4,12 @@ import { Transaction } from "@circle-fin/user-controlled-wallets/dist/types/clie
 
 import { useQuery } from "@tanstack/react-query";
 
-const useTransactions = () => {
+const useTransactions = ({ walletId }: { walletId: string }) => {
   const { data, error, isLoading, status, refetch } = useQuery({
-    queryKey: ["transaction"],
+    queryKey: ["transaction", walletId],
     queryFn: async () => {
       try {
-        const response = await fetch(`/api/wallet/_/transactions`);
+        const response = await fetch(`/api/wallet/${walletId}/transactions`);
         const body = await response.json();
         if (response.ok) {
           return body as Transaction[];

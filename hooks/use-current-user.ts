@@ -6,8 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 
 const useCurrentUser = () => {
   const global = globalState();
+  const shouldFetch = !global.user;
   const { data, error, isLoading, status, refetch } = useQuery({
     queryKey: ["me"],
+    enabled: shouldFetch,
     queryFn: async () => {
       try {
         const response = await fetch(`/api/auth/me`);
@@ -23,18 +25,14 @@ const useCurrentUser = () => {
     },
   });
 
-  if (data && global.walletIds.length == 0) {
-    global.setWalletIds(data.walletIds);
-
-    if (global.selectedWalletId == null) {
-      global.setWalletId(data.walletIds[data.walletIds.length - 1]);
-    }
+  if (data && !global.user) {
+    global.setUser(data);
   }
 
   return {
-    data,
+    data: global.user || data,
     error,
-    isLoading: isLoading,
+    isLoading: isLoading && shouldFetch,
     status,
     refetch,
   };

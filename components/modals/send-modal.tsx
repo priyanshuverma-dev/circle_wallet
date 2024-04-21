@@ -16,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -35,11 +34,14 @@ import { globalState } from "@/store/global";
 import useWallet from "@/hooks/use-wallet";
 import { useEffect, useState } from "react";
 import { W3SSdk } from "@circle-fin/w3s-pw-web-sdk";
+import { useQueryClient } from "@tanstack/react-query";
+import { PlusCircleIcon } from "lucide-react";
 
 const formSchema = z.object({
   destinationAddress: z.string().min(3, {
     message: "Destination address is required",
   }),
+  name: z.string().optional(),
   fromAddress: z.string(),
   tokenId: z.string().min(1, {
     message: "Token is required",
@@ -52,12 +54,15 @@ const formSchema = z.object({
 const SendModal = () => {
   const modal = sendModalState();
   const global = globalState();
+  const contacts = global.user?.contacts ?? [];
   const { data, isLoading, error } = useWallet({
     walletId: global.selectedWalletId!,
   });
+  const qc = useQueryClient();
 
   const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showNameField, setShowNameField] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -129,6 +134,12 @@ const SendModal = () => {
       circleClient.execute(body.challengeId, async (error, result) => {
         if (result) {
           toast.success("Transation is in progress");
+          qc.refetchQueries({
+            queryKey: ["wallet", global.selectedWalletId!],
+          });
+          qc.refetchQueries({
+            queryKey: ["transaction", global.selectedWalletId!],
+          });
         }
         if (error) {
           console.error(error);
@@ -167,13 +178,17 @@ const SendModal = () => {
                   <FormItem>
                     <FormLabel>From Address</FormLabel>
                     <FormControl>
-                      <Input placeholder="fetching.." disabled {...field} />
+                      <Input
+                        placeholder="auto fetching.."
+                        disabled
+                        {...field}
+                      />
                     </FormControl>
-
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 disabled={loading}
                 control={form.control}
@@ -181,14 +196,62 @@ const SendModal = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Destination Address</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter reciever address" {...field} />
-                    </FormControl>
 
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          placeholder="Enter reciever address"
+                          {...field}
+                        />
+                        {form.getValues("destinationAddress").length > 1 && (
+                          <button
+                            type="button"
+                            className="absolute inset-y-0 right-0 flex items-center px-2"
+                            onClick={() => setShowNameField(true)}
+                          >
+                            <PlusCircleIcon />
+                          </button>
+                        )}
+                      </div>
+                    </FormControl>
+                    <Select
+                      onValueChange={(v) =>
+                        form.setValue("destinationAddress", v)
+                      }
+                    >
+                      <SelectTrigger className="">
+                        Recent addresses
+                      </SelectTrigger>
+                      <SelectContent>
+                        {contacts.map((contact) => (
+                          <SelectItem value={contact.address}>
+                            {contact.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              {showNameField && (
+                <FormField
+                  disabled={loading}
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Reciever's Name (optional)</FormLabel>
+
+                      <FormControl>
+                        <Input placeholder="Name of Reciever" {...field} />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               <FormField
                 disabled={loading}
                 control={form.control}
