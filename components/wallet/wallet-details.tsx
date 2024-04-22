@@ -1,36 +1,37 @@
 "use client";
+/**
+ * This component is responsible for rendering the wallet details in the wallet page.
+ * @description This component is responsible for rendering the wallet details that are
+ * used to display the wallet address, available tokens and the send and recieve buttons.
+ * @file defines the wallet details component for the wallet page
+ */
 
 import useWallet from "@/hooks/use-wallet";
 import { globalState } from "@/store/global";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectSeparator,
-} from "../ui/select";
-import { Clipboard, PlusCircleIcon } from "lucide-react";
+import { recieveModalState } from "@/store/recieve-modal-state";
+import { sendModalState } from "@/store/send-modal-state";
+
+import { Clipboard } from "lucide-react";
 import toast from "react-hot-toast";
+
 import { Separator } from "../ui/separator";
 import { Skeleton } from "../ui/skeleton";
 import { Button } from "../ui/button";
 import WalletSelector from "./wallet-selector";
-import { recieveModalState } from "@/store/recieve-modal-state";
-import { sendModalState } from "@/store/send-modal-state";
 
 export default function WalletDetails() {
-  const global = globalState();
-  const recieveModal = recieveModalState();
-  const sendModal = sendModalState();
+  const global = globalState(); // get the global state from the global store
+  const recieveModal = recieveModalState(); // get the recieve modal state from the recieve modal store
+  const sendModal = sendModalState(); // get the send modal state from the send modal store
   const {
     data,
     isLoading: walletLoading,
     error: walletError,
   } = useWallet({
     walletId: global.selectedWalletId!,
-  });
+  }); // get the wallet data from the useWallet hook
 
+  // return the skeleton if the selected wallet id is null or the wallet is loading
   if (global.selectedWalletId == null || walletLoading)
     return (
       <div className="flex justify-center items-center p-2 flex-col w-full">
@@ -38,8 +39,11 @@ export default function WalletDetails() {
         <Skeleton className="h-8 w-full" />
       </div>
     );
+
+  // return the error message if there is an error
   if (walletError) return <p>Wallet Error: {walletError.message}</p>;
 
+  // This function is used to copy the wallet address to the clipboard
   async function copyAddress(addr: string) {
     await window.navigator.clipboard.writeText(addr);
     toast.success("Address copied share to recieve tokens");

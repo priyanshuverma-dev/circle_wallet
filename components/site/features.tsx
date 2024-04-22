@@ -1,3 +1,9 @@
+/**
+ * Features component
+ * @description Features component for the site
+ * @file This file defines the features component of the site.
+ */
+
 import React from "react";
 import { Icons } from "../icons";
 

@@ -1,3 +1,10 @@
+/**
+ * This file is used to create a singleton instance of PrismaClient.
+ * It is used to connect to the database.
+ * @file lib/db.ts
+ * I think do not need to change this file.
+ */
+
 import { PrismaClient } from "@prisma/client";
 
 const prismaClientSingleton = () => {

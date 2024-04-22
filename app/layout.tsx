@@ -1,16 +1,24 @@
+// importing types and fonts
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
+
+// importing css file
 import "./globals.css";
+
 import { cn } from "@/lib/utils";
-import AuthProvider from "@/providers/auth";
-import { ThemeProvider } from "@/providers/theme";
 import { auth } from "@/auth";
-import { Toaster } from "react-hot-toast";
+
+// importing providers
+import ThemeProvider from "@/providers/theme";
+import AuthProvider from "@/providers/auth";
 import QueryProvider from "@/providers/query";
 import ModalsProvider from "@/providers/modals";
+import { QueryClient } from "@tanstack/react-query";
 
+// font declaration
 const font = DM_Sans({ subsets: ["latin"] });
 
+// metadata declaration
 export const metadata: Metadata = {
   title: "Circle Wallet - Bounty",
   description: "Stackup Bounty - Circle Wallet",
@@ -23,32 +31,28 @@ export default async function RootLayout({
   children: React.ReactNode;
   modal: React.ReactNode;
 }>) {
+  // auth function from auth.ts
   const session = await auth();
+  const queryClient = new QueryClient();
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <AuthProvider session={session}>
-        <body
-          className={cn(
-            font.className,
-            "bg-gradient-to-r from-slate-900 to-stone-800 !scroll-smooth"
-          )}
-        >
-          <QueryProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              enableSystem
-              disableTransitionOnChange
-            >
+      <body
+        className={cn(
+          font.className,
+          "bg-gradient-to-r from-slate-900 to-stone-800 !scroll-smooth"
+        )}
+      >
+        <AuthProvider session={session}>
+          <QueryProvider queryClient={queryClient}>
+            <ThemeProvider attribute="class" defaultTheme="dark">
               {children}
               {modal}
-              <Toaster />
               <ModalsProvider />
             </ThemeProvider>
           </QueryProvider>
-        </body>
-      </AuthProvider>
+        </AuthProvider>
+      </body>
     </html>
   );
 }

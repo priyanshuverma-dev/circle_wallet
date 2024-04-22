@@ -1,3 +1,9 @@
+/**
+ * Header component for the site
+ * @description Header component for the site
+ * @file This file defines the header component of the site.
+ */
+
 import Link from "next/link";
 import React from "react";
 import { Icons } from "../icons";

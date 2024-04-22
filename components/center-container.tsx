@@ -1,3 +1,10 @@
+/**
+ * CenterContainer component
+ * @description CenterContainer component for the site
+ * @file This file defines the CenterContainer component of the site.
+ * This component is used to center the content of the site.
+ */
+
 import { cn } from "@/lib/utils";
 import React from "react";
 

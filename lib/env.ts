@@ -1,3 +1,9 @@
+/**
+ * This file is used to validate the environment variables.
+ * @file lib/env.ts
+ * add new env variable to .env file and add it to the envSchema to validate it.
+ */
+
 import { z } from "zod";
 
 const envSchema = z.object({

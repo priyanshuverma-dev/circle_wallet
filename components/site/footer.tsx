@@ -1,3 +1,9 @@
+/**
+ * Footer component
+ * @description Footer component for the site
+ * @file This file defines the footer component of the site.
+ */
+
 import Link from "next/link";
 import React from "react";
 

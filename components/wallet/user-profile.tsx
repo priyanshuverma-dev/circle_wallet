@@ -1,16 +1,25 @@
 "use client";
-
-import useCurrentUser from "@/hooks/use-current-user";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Skeleton } from "../ui/skeleton";
-import { cn } from "@/lib/utils";
+/**
+ * This component is responsible for rendering the user profile in the wallet page.
+ * @description This component is responsible for rendering the user profile that has
+ * the user name, email and pin status.
+ * @file defines the user profile component for the wallet page
+ */
 import { PinStatus } from "@prisma/client";
+import useCurrentUser from "@/hooks/use-current-user";
+
+import { Skeleton } from "../ui/skeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+
+import { cn } from "@/lib/utils";
 
 const UserProfile = () => {
-  const { data: user, isLoading, error } = useCurrentUser();
+  const { data: user, isLoading, error } = useCurrentUser(); // get the current user data from the useCurrentUser hook
 
+  // return the skeleton if the data is loading
   if (isLoading) return <UserProfileLoading />;
 
+  // return the error message if there is an error
   if (error) {
     return (
       <details className="text-destructive leading-8">

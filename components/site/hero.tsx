@@ -1,3 +1,9 @@
+/**
+ * Hero component
+ * @description Hero component for the site
+ * @file This file defines the hero component of the site.
+ */
+
 import Link from "next/link";
 import React from "react";
 

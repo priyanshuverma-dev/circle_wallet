@@ -1,26 +1,44 @@
+/*
+  
+  This component is used to show the recieve modal.
+  It will show the wallet id and wallet address of the user.
+  User can copy the wallet id and wallet address by clicking on the copy icon.
+*/
+
+// importing toast
+import toast from "react-hot-toast";
+// importing lucide react
+import { Clipboard } from "lucide-react";
+
+// importing dialog components
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
+// importing recieveModalState from store
 import { recieveModalState } from "@/store/recieve-modal-state";
-import { Clipboard } from "lucide-react";
-import toast from "react-hot-toast";
 
 const RecieveModal = () => {
-  const modal = recieveModalState();
+  const modal = recieveModalState(); // getting the recieve modal state
+
+  /*
+    This function is used to copy the text to the clipboard.
+    It takes the text as an argument and copies it to the clipboard.
+  */
   async function copyText(addr: string) {
-    await window.navigator.clipboard.writeText(addr);
-    toast.success("copied share to recieve tokens");
+    await window.navigator.clipboard.writeText(addr); // copying the text to the clipboard
+    toast.success("copied share to recieve tokens"); // showing the success toast
   }
 
   return (
     <Dialog
       open={modal.isOpen}
       onOpenChange={() => {
+        // closing the modal
         modal.onClose();
       }}
     >

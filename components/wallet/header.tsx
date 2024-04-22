@@ -1,3 +1,9 @@
+/**
+ * Header component for the wallet page
+ * @description Header component for the wallet page
+ * @file defines the header component for the wallet page
+ */
+
 import Link from "next/link";
 import React from "react";
 import MoreMenu from "./more-menu";

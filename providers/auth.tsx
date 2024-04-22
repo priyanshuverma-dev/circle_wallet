@@ -8,5 +8,6 @@ export interface AuthContextProps {
 }
 
 export default function AuthProvider({ children, session }: AuthContextProps) {
+  // session is passed as a prop to the SessionProvider
   return <SessionProvider session={session}>{children}</SessionProvider>;
 }

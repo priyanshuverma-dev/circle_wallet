@@ -1,18 +1,26 @@
 "use client";
-
+/**
+ * This component is responsible for rendering the transactions in the wallet page.
+ * @description This component is responsible for rendering the transactions that are
+ * done in the wallet.
+ * @file defines the transactions component for the wallet page
+ */
 import useTransactions from "@/hooks/use-transactions";
+import { globalState } from "@/store/global";
+
 import { Skeleton } from "../ui/skeleton";
 import { Separator } from "../ui/separator";
-import { cn } from "@/lib/utils";
-import { globalState } from "@/store/global";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+import { cn } from "@/lib/utils";
+
 export default function Transactions() {
-  const global = globalState();
+  const global = globalState(); // get the global state from the global store
   const { data, error, isLoading } = useTransactions({
     walletId: global.selectedWalletId!,
-  });
+  }); // get the transactions data from the useTransactions hook
 
+  // return the skeleton if the data is loading or the selected wallet id is null
   if (isLoading || global.selectedWalletId == null) {
     return (
       <div className="flex justify-center items-center p-2 flex-col w-full">
@@ -21,6 +29,8 @@ export default function Transactions() {
       </div>
     );
   }
+
+  // return the error message if there is an error
   if (error) {
     return (
       <details className="text-destructive leading-8">
