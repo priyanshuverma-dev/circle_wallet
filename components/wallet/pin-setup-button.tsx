@@ -8,11 +8,13 @@ import { PinStatus } from "@prisma/client";
 import useCurrentUser from "@/hooks/use-current-user";
 import { W3SSdk } from "@circle-fin/w3s-pw-web-sdk";
 import { useQueryClient } from "@tanstack/react-query";
+import { globalState } from "@/store/global";
 
 export default function PinSetupButton() {
   const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(false);
   const { data, isLoading, error } = useCurrentUser();
+  const global = globalState();
   const qc = useQueryClient();
 
   const circleClient = new W3SSdk();
@@ -57,6 +59,8 @@ export default function PinSetupButton() {
             });
             const data = await response.json();
             if (response.status !== 200) throw new Error(data.message);
+
+            global.removeUser();
             qc.refetchQueries({
               queryKey: ["user"],
             });

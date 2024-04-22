@@ -56,6 +56,7 @@ export default function WalletSelector() {
           });
           const data = await response.json();
           if (response.status !== 200) throw new Error(data.message);
+          global.removeUser();
           qc.refetchQueries({
             queryKey: ["user"],
           });

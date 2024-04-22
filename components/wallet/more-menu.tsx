@@ -14,15 +14,21 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function MoreMenu() {
+  const [isMounted, setIsMounted] = useState(false);
   const [loading, setLoading] = useState(false);
   const session = useSession();
   const circleClient = new W3SSdk();
 
   useEffect(() => {
+    setIsMounted(true);
     circleClient.setAppSettings({
       appId: process.env.NEXT_PUBLIC_CIRCLE_APP_ID as string,
     });
-  }, [circleClient]);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
 
   async function restorePin() {
     try {
