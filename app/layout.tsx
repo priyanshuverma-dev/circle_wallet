@@ -13,7 +13,6 @@ import ThemeProvider from "@/providers/theme";
 import AuthProvider from "@/providers/auth";
 import QueryProvider from "@/providers/query";
 import ModalsProvider from "@/providers/modals";
-import { QueryClient } from "@tanstack/react-query";
 
 // font declaration
 const font = DM_Sans({ subsets: ["latin"] });
@@ -33,7 +32,6 @@ export default async function RootLayout({
 }>) {
   // auth function from auth.ts
   const session = await auth();
-  const queryClient = new QueryClient();
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -44,7 +42,7 @@ export default async function RootLayout({
         )}
       >
         <AuthProvider session={session}>
-          <QueryProvider queryClient={queryClient}>
+          <QueryProvider>
             <ThemeProvider attribute="class" defaultTheme="dark">
               {children}
               {modal}
